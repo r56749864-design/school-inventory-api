@@ -1,6 +1,8 @@
 
 const swaggerJsdoc = require('swagger-jsdoc');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 const options = {
   definition: {
     openapi: '3.0.0',
@@ -11,8 +13,12 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:5000',
-        description: 'Local development server'
+        url: isProduction
+          ? 'https://school-inventory-api.vercel.app'
+          : 'http://localhost:5000',
+        description: isProduction
+          ? 'Production server'
+          : 'Local development server'
       }
     ],
     tags: [
