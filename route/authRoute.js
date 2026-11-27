@@ -81,6 +81,33 @@ router.post('/register', registerValidator, register);
  */
 router.post('/login', loginValidator, login);
 
+/**
+ * @swagger
+ * /api/auth/me:
+ *   get:
+ *     summary: Get current logged-in user profile
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User profile retrieved successfully
+ *       401:
+ *         description: Unauthorized
+ */
+router.get('/me', protect, (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'User profile retrieved successfully',
+    user: {
+      id: req.user._id,
+      name: req.user.name,
+      email: req.user.email,
+      role: req.user.role
+    }
+  });
+});
+
 // Test JWT Authentication
 router.get('/test-protect', protect, (req, res) => {
   res.status(200).json({

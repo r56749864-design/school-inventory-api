@@ -88,7 +88,7 @@ router.post('/', createCategoryValidator, createCategory);
 /**
  * @swagger
  * /api/categories/{id}:
- *   patch:
+ *   put:
  *     summary: Update a category
  *     tags: [Categories]
  *     security:
@@ -109,7 +109,7 @@ router.post('/', createCategoryValidator, createCategory);
  *       200:
  *         description: Category updated successfully
  */
-router.patch(
+router.put(
   '/:id',
   categoryIdValidator,
   updateCategoryValidator,

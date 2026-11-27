@@ -130,7 +130,7 @@ router.post(
 /**
  * @swagger
  * /api/items/{id}:
- *   patch:
+ *   put:
  *     summary: Update an item
  *     tags: [Items]
  *     description: Admin only
@@ -155,7 +155,7 @@ router.post(
  *       404:
  *         description: Item not found
  */
-router.patch(
+router.put(
   '/:id',
   protect,
   restrictTo('admin'),

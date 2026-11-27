@@ -3,7 +3,8 @@ const express = require('express');
 const router = express.Router();
 
 const {
-  getAllActivityLogs
+  getAllActivityLogs,
+  getMyActivityLogs
 } = require('../controller/activityLogController');
 
 const protect = require('../middleware/protect');
@@ -15,6 +16,22 @@ const restrictTo = require('../middleware/restrictTo');
  *   name: Activity Logs
  *   description: Activity log management
  */
+
+/**
+ * @swagger
+ * /api/activity-logs/my:
+ *   get:
+ *     summary: Get my activity logs (User)
+ *     tags: [Activity Logs]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Own activity logs retrieved successfully
+ *       401:
+ *         description: Unauthorized
+ */
+router.get('/my', protect, getMyActivityLogs);
 
 /**
  * @swagger
@@ -53,11 +70,6 @@ const restrictTo = require('../middleware/restrictTo');
  *       403:
  *         description: Admin access required
  */
-router.get(
-  '/',
-  protect,
-  restrictTo('admin'),
-  getAllActivityLogs
-);
+router.get('/', protect, restrictTo('admin'), getAllActivityLogs);
 
 module.exports = router;

@@ -2,6 +2,7 @@
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
+const connectDB = require('./config/database');
 
 // Register Models
 require('./model/category');
@@ -24,6 +25,16 @@ const app = express();
 
 app.use(express.json());
 app.use(logger);
+
+// Database connection
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

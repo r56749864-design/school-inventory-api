@@ -128,6 +128,24 @@ const getMyLoans = catchAsync(async (req, res) => {
   });
 });
 
+// User: melihat detail peminjaman milik sendiri
+const getMyLoanById = catchAsync(async (req, res, next) => {
+  const loan = await Loan.findOne({
+    _id: req.params.id,
+    user: req.user._id,
+    archived: false
+  });
+
+  if (!loan) {
+    return next(new AppError('Loan not found', 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    data: { loan }
+  });
+});
+
 // Admin: melihat seluruh data peminjaman
 const getAllLoans = catchAsync(async (req, res) => {
   const loans = await Loan.find({
@@ -143,9 +161,28 @@ const getAllLoans = catchAsync(async (req, res) => {
   });
 });
 
+// Admin: melihat detail peminjaman mana pun
+const getLoanById = catchAsync(async (req, res, next) => {
+  const loan = await Loan.findOne({
+    _id: req.params.id,
+    archived: false
+  }).populate('user', 'name email');
+
+  if (!loan) {
+    return next(new AppError('Loan not found', 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    data: { loan }
+  });
+});
+
 module.exports = {
   createLoan,
   verifyLoan,
   getMyLoans,
-  getAllLoans
+  getMyLoanById,
+  getAllLoans,
+  getLoanById
 };

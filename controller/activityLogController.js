@@ -1,3 +1,4 @@
+
 const ActivityLog = require('../model/activityLog');
 const catchAsync = require('../util/catchAsync');
 
@@ -6,12 +7,10 @@ const getAllActivityLogs = catchAsync(async (req, res, next) => {
     archived: false
   };
 
-  // Filter by activity type
   if (req.query.activityType) {
     filter.activityType = req.query.activityType;
   }
 
-  // Filter by date range
   if (req.query.startDate || req.query.endDate) {
     filter.created_at = {};
 
@@ -39,6 +38,22 @@ const getAllActivityLogs = catchAsync(async (req, res, next) => {
   });
 });
 
+const getMyActivityLogs = catchAsync(async (req, res, next) => {
+  const activityLogs = await ActivityLog.find({
+    user: req.user._id,
+    archived: false
+  }).sort({ created_at: -1 });
+
+  res.status(200).json({
+    success: true,
+    results: activityLogs.length,
+    data: {
+      activityLogs
+    }
+  });
+});
+
 module.exports = {
-  getAllActivityLogs
+  getAllActivityLogs,
+  getMyActivityLogs
 };

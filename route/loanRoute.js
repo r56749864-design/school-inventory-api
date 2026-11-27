@@ -6,7 +6,9 @@ const {
   createLoan,
   verifyLoan,
   getMyLoans,
-  getAllLoans
+  getMyLoanById,
+  getAllLoans,
+  getLoanById
 } = require('../controller/loanController');
 
 const protect = require('../middleware/protect');
@@ -38,7 +40,6 @@ router.use(protect);
  *             properties:
  *               item:
  *                 type: string
- *                 description: Item ID
  *               quantity:
  *                 type: integer
  *                 minimum: 1
@@ -69,6 +70,28 @@ router.get('/my', getMyLoans);
 
 /**
  * @swagger
+ * /api/loans/my/{id}:
+ *   get:
+ *     summary: Get my loan detail
+ *     tags: [Loans]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Loan detail retrieved successfully
+ *       404:
+ *         description: Loan not found
+ */
+router.get('/my/:id', getMyLoanById);
+
+/**
+ * @swagger
  * /api/loans:
  *   get:
  *     summary: Get all loans (Admin)
@@ -85,7 +108,31 @@ router.get('/', restrictTo('admin'), getAllLoans);
 
 /**
  * @swagger
- * /api/loans/{id}/verify:
+ * /api/loans/{id}:
+ *   get:
+ *     summary: Get any loan detail (Admin)
+ *     tags: [Loans]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Loan detail retrieved successfully
+ *       403:
+ *         description: Admin access required
+ *       404:
+ *         description: Loan not found
+ */
+router.get('/:id', restrictTo('admin'), getLoanById);
+
+/**
+ * @swagger
+ * /api/loans/{id}/status:
  *   patch:
  *     summary: Approve or reject a loan (Admin)
  *     tags: [Loans]
@@ -115,6 +162,6 @@ router.get('/', restrictTo('admin'), getAllLoans);
  *       403:
  *         description: Admin access required
  */
-router.patch('/:id/verify', restrictTo('admin'), verifyLoan);
+router.patch('/:id/status', restrictTo('admin'), verifyLoan);
 
 module.exports = router;

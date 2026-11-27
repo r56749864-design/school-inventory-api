@@ -15,6 +15,15 @@ const options = {
         description: 'Local development server'
       }
     ],
+    tags: [
+      { name: 'Authentication', description: 'User registration and login' },
+      { name: 'Categories', description: 'Category management' },
+      { name: 'Items', description: 'Item management' },
+      { name: 'Loans', description: 'Loan management' },
+      { name: 'Returns', description: 'Return management' },
+      { name: 'Activity Logs', description: 'Activity log management' },
+      { name: 'External Activity', description: 'External activity callback' }
+    ],
     components: {
       securitySchemes: {
         bearerAuth: {
