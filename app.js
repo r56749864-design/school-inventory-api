@@ -36,7 +36,19 @@ app.use(async (req, res, next) => {
   }
 });
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// Swagger Documentation
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customCssUrl: '/api-docs/swagger-ui.css',
+    customJs: [
+      '/api-docs/swagger-ui-bundle.js',
+      '/api-docs/swagger-ui-standalone-preset.js'
+    ],
+    customfavIcon: '/api-docs/favicon-32x32.png'
+  })
+);
 
 app.use('/api/auth', authRoute);
 app.use('/api/items', itemRoute);
